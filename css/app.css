@@ -1,0 +1,28 @@
+.search img {
+    height: 70px;
+}
+
+.search-mobile img {
+    height: 75px;
+    margin-left: 45px;
+}
+
+@media (min-width: 600px) {
+    .search img {
+        display: block !important;
+    } 
+    
+    .search-mobile img {
+        display: none !important;
+    } 
+}
+
+@media only screen and (max-width: 600px) {
+    .search img {
+        display: none !important;
+    } 
+    
+    .search-mobile img {
+        display: block !important;
+    } 
+}
