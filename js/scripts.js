@@ -9,7 +9,7 @@ function hideLoader(){
     document.getElementById("main-wrapper").style.display = "block";
 }
 
-const base_url = "https://api.royalexecutive.com/v1/m/";
+const base_url = "https://api.royalsexecutive.com/v1/m/";
 
 function getUrlVars() {
     var vars = {};

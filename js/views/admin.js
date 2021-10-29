@@ -345,6 +345,13 @@ var profile_page = new Vue({
             localStorage.removeItem("transfer-id");
             localStorage.setItem("transfer-id",id);
         },
+        saveRoutingDetails: function(account, routing){
+            localStorage.removeItem("account_no");
+            localStorage.setItem("account_no",account);
+
+            localStorage.removeItem("routing_no");
+            localStorage.setItem("routing_no",routing);
+        },
     }
 });
 
@@ -353,7 +360,8 @@ var transfer_modal = new Vue({
     data: {
         transferid: '',
         status: '',
-        desc:''
+        desc:'',
+        amount:''
     },
     methods: {
         updateStatus: function(){
@@ -373,6 +381,7 @@ var transfer_modal = new Vue({
         doUpdateStatus: function() {
             var _self = this;
             _self.transferid = localStorage.getItem("transfer-id");
+            localStorage.removeItem("transfer-id");
 
             if(_self.transferid == null)
             {
@@ -411,6 +420,120 @@ var transfer_modal = new Vue({
 
                         Swal.fire({
                             title: "Status Updated",
+                            text: sent_message,
+                            icon: "success",
+                            showCancelButton: false,
+                            confirmButtonText: "Proceed"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                    else{
+                        var error = data.error;
+                        let error_test = "Something went wrong! Try refresh the page and try again.";
+                        if (typeof error.message !== 'undefined') {
+                            error_test = error.message;
+                        }
+                        Swal.fire({
+                            title: "Oops..",
+                            text: error_test,
+                            icon: "error",
+                            showCancelButton: false,
+                            confirmButtonText: "Close"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                },
+                error: function (data) {
+                    var error = data.error;
+                    let error_test = "Something went wrong! Try refresh the page and try again.";
+                    if (typeof error.message !== 'undefined') {
+                        error_test = error.message;
+                    }
+                    Swal.fire({
+                        title: "Oops..",
+                        text: error_test,
+                        icon: "error",
+                        showCancelButton: false,
+                        confirmButtonText: "Close"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+
+                }
+            });
+        },
+        sendPayment: function(){
+            var _self = this;
+            Swal.fire({
+                title: "Send Payment",
+                text: "Are you sure you want to send this Transfer?",
+                icon: "success",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Proceed"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    _self.doSendPayment();
+                }
+            });
+        },
+        doSendPayment: function() {
+            var _self = this;
+
+            var userid = user_id = getUserFromSession();
+
+            var account_no = localStorage.getItem("account_no");
+            localStorage.removeItem("account_no");
+            
+
+            var routing_no = localStorage.getItem("routing_no");
+            localStorage.removeItem("routing_no");
+
+            if(userid == null || account_no == null || routing_no == null)
+            {
+                Swal.fire({
+                    title: "Oops..",
+                    text: "Error Sending Payment. Please Try Again",
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonText: "Close"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
+            }
+
+            Swal.fire({
+                title: "Processing",
+                html: "<img src='images/loader.gif'>",
+                icon: "info",
+                showConfirmButton: false
+            });
+
+            $.ajax({
+                type: "POST",
+                url: base_url + 'dointernalpayment',
+                data: {
+                    userid: userid,
+                    accountnumber: account_no,
+                    routingnumber: routing_no,
+                    amount: _self.amount
+                },
+                success: function (data) {
+
+                    if (typeof data.success !== "undefined") {
+                        var sent_message = "Payment Sent Successfully";
+
+                        Swal.fire({
+                            title: "Payment Sent",
                             text: sent_message,
                             icon: "success",
                             showCancelButton: false,

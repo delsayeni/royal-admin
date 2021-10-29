@@ -62,8 +62,14 @@
                                                 <td>{{user.account_number}}</td>
                                                 <td>{{user.routing_number}}</td>
                                                 <td>{{user.status}}</td>
-                                                <td v-if="user.status == 'ENABLED'"><button v-on:click="disableUser(user.id)" class="badge px-3 py-2 bg-danger">Disable</button></td>
-                                                <td v-else><button v-on:click="enableUser(user.id)" class="badge px-3 py-2 bg-success">Enable</button></td>
+                                                <td v-if="user.status == 'ENABLED'">
+                                                    <button type="button" v-on:click="saveRoutingDetails(user.account_number,user.routing_number)" class="btn btn-success s-2" data-toggle="modal" data-target="#addPayment">Send Payment</button>
+                                                    <button v-on:click="disableUser(user.id)" class="badge px-3 py-2 bg-danger">Disable</button>
+                                                </td>
+                                                <td v-else>
+                                                    <button type="button" v-on:click="saveRoutingDetails(user.account_number,user.routing_number)" class="btn btn-primary s-2" data-toggle="modal" data-target="#addPayment">Send Payment</button>
+                                                    <button v-on:click="enableUser(user.id)" class="badge px-3 py-2 bg-success">Enable</button>
+                                                </td>
                                             </tr>
                                     </tbody>
                                     </table>
@@ -150,34 +156,63 @@
 
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="addStatus" tabindex="-1">
-    <div id="transfer_modal" class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCardLabel">Add Transfer Status</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form @submit.prevent="updateStatus" class="identity-upload">
-                    <div class="row g-3">
-                        <div class="col-xl-12">
-                            <label class="form-label">Transfer Status</label>
-                            <input type="text" v-model.trim="status" class="form-control" placeholder="Transfer On Hold" required>
+<div id="transfer_modal">
+    <!-- Modal -->
+    <div class="modal fade" id="addStatus" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCardLabel">Add Transfer Status</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form @submit.prevent="updateStatus" class="identity-upload">
+                        <div class="row g-3">
+                            <div class="col-xl-12">
+                                <label class="form-label">Transfer Status</label>
+                                <input type="text" v-model.trim="status" class="form-control" placeholder="Transfer On Hold" required>
+                            </div>
+                            <div class="col-xl-12">
+                                <label class="form-label">Status Description</label>
+                                <textarea class="form-control" v-model.trim="desc" rows="4"></textarea>
+                            </div>
                         </div>
-                        <div class="col-xl-12">
-                            <label class="form-label">Status Description</label>
-                            <input type="text" v-model.trim="desc" class="form-control" placeholder="Description About the Status Change (Will be sent in Email)">
+                        <div class="col-xl-12" style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
-                    </div>
-                    <div class="col-xl-12" style="margin-top: 20px;">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="addPayment" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCardLabel">Send Payment To User</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form @submit.prevent="sendPayment" class="identity-upload">
+                        <div class="row g-3">
+                            <div class="col-xl-12">
+                                <label class="form-label">Amount</label>
+                                <input type="number" v-model.trim="amount" class="form-control" placeholder="Amount to Send" required>
+                            </div>
+                        </div>
+                        <div class="col-xl-12" style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
 
 <?php
     include 'common/commonjs.php';

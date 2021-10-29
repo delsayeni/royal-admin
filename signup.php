@@ -12,11 +12,11 @@
 ?>
 
 <div id="register-confirm" class="authincation section-padding">
-    <div class="container h-100">
+    <div class="container h-100" style="margin-top: -100px;">
         <div class="row justify-content-center h-100 align-items-center">
             <div class="col-xl-5 col-md-6">
                 <div class="mini-logo text-center my-4">
-                    <a href="index.html"><img src="images/logo.png" alt=""></a>
+                    <a href=""><img src="images/logo.png" alt=""></a>
                     <h4 class="card-title mt-5">Create your account</h4>
                     <h6 class="card-title mt-5">Royal Executive is a Referal Only Platform</h6>
                 </div>

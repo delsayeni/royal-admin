@@ -14,7 +14,7 @@
 <div id="main-wrapper">
 
     <div id="resetpassword-confirm" class="authincation section-padding">
-        <div class="container h-100">
+        <div class="container h-100" style="margin-top: -100px;">
             <div class="row justify-content-center h-100 align-items-center">
                 <div class="col-xl-4 col-md-5">
                     <div class="mini-logo text-center my-3">
